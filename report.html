@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Report — KV Project</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./home.css" />
+
+    <style>
+      html { scroll-behavior: smooth; }
+      
+      /* Custom Report Page Styles */
+      .reportSection {
+        padding-top: 120px;
+        padding-bottom: 100px;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .reportLayout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 50px;
+        align-items: start;
+      }
+
+      @media (max-width: 900px) {
+        .reportLayout { grid-template-columns: 1fr; gap: 30px; }
+      }
+
+      /* Sidebar (Table of Contents) */
+      .reportSidebar {
+        position: sticky;
+        top: 100px;
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border-radius: var(--radius);
+        padding: 28px 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .sidebarTitle {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-style: italic;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--gold-light);
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--glass-border);
+        padding-bottom: 14px;
+      }
+
+      .sidebarList {
+        list-style: none;
+        display: grid;
+        gap: 14px;
+      }
+
+      .sidebarLink {
+        font-size: 14px;
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 200ms var(--ease-out), transform 200ms var(--ease-out);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .sidebarLink:hover {
+        color: var(--gold-light);
+        transform: translateX(4px);
+      }
+
+      .sidebarLink span {
+        color: var(--gold-base);
+        font-weight: 600;
+        font-size: 11px;
+        background: rgba(167, 139, 113, 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      /* Report Header Card */
+      .reportHeaderCard {
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        border-radius: var(--radius);
+        padding: 40px;
+        margin-bottom: 40px;
+        box-shadow: var(--shadow), var(--gold-glow);
+        text-align: center;
+      }
+
+      .reportTitle {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-style: italic;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        color: var(--gold-hover);
+        margin: 12px 0 24px;
+        line-height: 1.2;
+      }
+
+      .metaGrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        text-align: left;
+        border-top: 1px solid var(--glass-border);
+        padding-top: 28px;
+      }
+
+      .metaItem {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: rgba(10,10,10,0.4);
+        padding: 16px;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(255,255,255,0.03);
+      }
+
+      .metaLabel {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--gold-base);
+        font-weight: 600;
+      }
+
+      .metaVal {
+        font-size: 14px;
+        color: var(--text);
+        line-height: 1.4;
+      }
+
+      /* Content Blocks */
+      .reportContent {
+        display: grid;
+        gap: 50px;
+      }
+
+      .contentBlock {
+        background: rgba(10, 10, 10, 0.4);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius);
+        padding: 36px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        scroll-margin-top: 100px;
+      }
+
+      .blockHeadlight {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-style: italic;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--gold-light);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        border-bottom: 1px solid var(--glass-border);
+        padding-bottom: 16px;
+      }
+
+      .blockNumber {
+        font-size: 16px;
+        color: var(--bg-base);
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-style: normal;
+        background: linear-gradient(135deg, var(--gold-base), var(--gold-hover));
+        width: 42px;
+        height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(167, 139, 113, 0.4);
+      }
+
+      .blockText {
+        font-size: 15px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 300;
+      }
+
+      .blockText p {
+        margin-bottom: 16px;
+      }
+
+      .blockText ul {
+        margin-bottom: 16px;
+        padding-left: 20px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .blockText li::marker {
+        color: var(--gold-base);
+      }
+
+      /* Data Tables */
+      .reportTable {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 24px 0;
+        font-size: 14px;
+        background: rgba(10, 10, 10, 0.6);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--glass-border);
+        overflow: hidden;
+      }
+
+      .reportTable th {
+        background: rgba(167, 139, 113, 0.12);
+        color: var(--gold-light);
+        font-weight: 600;
+        text-align: left;
+        padding: 16px;
+        border-bottom: 1px solid var(--gold-border);
+      }
+
+      .reportTable td {
+        padding: 16px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        color: rgba(255, 255, 255, 0.8);
+      }
+      
+      .reportTable tr:last-child td {
+        border-bottom: none;
+      }
+
+      .reportTable tr:hover td {
+        background: rgba(255,255,255,0.02);
+      }
+
+      /* Special formatting for final block */
+      .memberList {
+        display: grid;
+        gap: 20px;
+        margin-top: 10px;
+      }
+      
+      .memberGroup {
+        background: rgba(167, 139, 113, 0.05);
+        border: 1px solid var(--gold-border);
+        padding: 20px;
+        border-radius: var(--radius-sm);
+      }
+      
+      .memberGroupTitle {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 18px;
+        color: var(--gold-hover);
+        margin-bottom: 12px;
+        font-style: italic;
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- Ambient background -->
+    <div class="bg" aria-hidden="true"></div>
+    <div class="bg-glow" aria-hidden="true"></div>
+
+    <!-- ── Fixed Navigation ── -->
+    <header class="topNav" aria-label="Main navigation" id="topNav">
+      <div class="navInner">
+        <a href="./home.html" class="navLogo">KV <em>Project</em></a>
+        <nav class="navLinks" aria-label="Site sections">
+          <a href="./home.html" class="navLink">Overview</a>
+          <a href="./home.html#features" class="navLink">Features</a>
+          <a href="./showcase.html" class="navLink">AI Showcase</a>
+          <a href="./report.html" class="navLink active">Report</a>
+        </nav>
+        <a href="./home.html" class="navCta">← Back to Home</a>
+      </div>
+    </header>
+
+    <!-- ── Report Section ── -->
+    <section class="reportSection">
+      <div class="sectionInner">
+        
+        <!-- Header Card (Exactly as requested) -->
+        <div class="reportHeaderCard reveal">
+          <div class="sectionLabel">INSPIRE AWARD – MANAK PROJECT REPORT</div>
+          <h1 class="reportTitle">Multifunctional Smart <em>Farming Machine</em></h1>
+          
+          <div class="metaGrid">
+            <div class="metaItem">
+              <span class="metaLabel">Submitted By</span>
+              <span class="metaVal">
+                <strong>Himanshu Kumar Choudhary</strong><br>Student, Kendriya Vidyalaya Muzaffarpur<br><br>
+                <strong>Ragib</strong><br>Student, Kendriya Vidyalaya Muzaffarpur
+              </span>
+            </div>
+            <div class="metaItem">
+              <span class="metaLabel">School</span>
+              <span class="metaVal">Kendriya Vidyalaya Muzaffarpur<br>Bihar</span>
+            </div>
+            <div class="metaItem">
+              <span class="metaLabel">Under</span>
+              <span class="metaVal">INSPIRE Award – MANAK<br>Department of Science & Technology (DST)<br>Government of India</span>
+            </div>
+            <div class="metaItem">
+              <span class="metaLabel">Academic Session</span>
+              <span class="metaVal">2026–27</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reportLayout">
+          <!-- Sidebar / Table of Contents -->
+          <aside class="reportSidebar reveal">
+            <h2 class="sidebarTitle">Contents</h2>
+            <ul class="sidebarList">
+              <li><a href="#sec1" class="sidebarLink"><span>01</span> Introduction</a></li>
+              <li><a href="#sec2" class="sidebarLink"><span>02</span> Aim & Objectives</a></li>
+              <li><a href="#sec3" class="sidebarLink"><span>03</span> Hypothesis</a></li>
+              <li><a href="#sec4" class="sidebarLink"><span>04</span> Need Statement</a></li>
+              <li><a href="#sec5" class="sidebarLink"><span>05</span> Work Plan</a></li>
+              <li><a href="#sec6" class="sidebarLink"><span>06</span> Methodology</a></li>
+              <li><a href="#sec7" class="sidebarLink"><span>07</span> Data Analysis</a></li>
+              <li><a href="#sec8" class="sidebarLink"><span>08</span> Solution of the Problem</a></li>
+              <li><a href="#sec9" class="sidebarLink"><span>09</span> Acknowledgement</a></li>
+              <li><a href="#sec10" class="sidebarLink"><span>10</span> Result</a></li>
+              <li><a href="#sec11" class="sidebarLink"><span>★</span> Project Members</a></li>
+            </ul>
+          </aside>
+
+          <!-- Main Content -->
+          <div class="reportContent">
+            
+            <div class="contentBlock reveal" id="sec1">
+              <h2 class="blockHeadlight"><span class="blockNumber">1</span> Introduction</h2>
+              <div class="blockText">
+                <p>Agriculture is the backbone of India's economy, and millions of farmers depend on farming for their livelihood. However, many farmers face problems such as shortage of labour, high farming costs, low productivity, and the need to purchase different machines for different agricultural tasks.</p>
+                <p>To solve these problems, we developed a <strong>Multifunctional Smart Farming Machine</strong>. This machine is designed to perform multiple farming operations such as potato planting, rice planting, crop cutting, bundling, and harvesting by simply selecting the required function from a touchscreen display.</p>
+                <p>The project aims to reduce farming costs, save time, increase productivity, and make farming easier for farmers. This innovation is especially helpful for small and medium-scale farmers who cannot afford multiple agricultural machines.</p>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec2">
+              <h2 class="blockHeadlight"><span class="blockNumber">2</span> Aim & Objectives</h2>
+              <div class="blockText">
+                <p><strong>Aim</strong><br>To design a smart multifunctional farming machine that can perform several agricultural operations using a single machine.</p>
+                <p><strong>Objectives</strong></p>
+                <ul>
+                  <li>To reduce farming costs.</li>
+                  <li>To reduce labour requirements.</li>
+                  <li>To save farmers' time.</li>
+                  <li>To increase agricultural productivity.</li>
+                  <li>To make farming simple and efficient.</li>
+                  <li>To perform multiple farming operations using one machine.</li>
+                  <li>To encourage the use of modern technology in agriculture.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec3">
+              <h2 class="blockHeadlight"><span class="blockNumber">3</span> Hypothesis</h2>
+              <div class="blockText">
+                <p>We believe that if a single smart machine can perform multiple farming activities, farmers will spend less money, save time, reduce labour dependency, and improve crop production.</p>
+                <p>Our hypothesis is that a multifunctional farming machine will be more economical and efficient than using several separate machines.</p>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec4">
+              <h2 class="blockHeadlight"><span class="blockNumber">4</span> Need Statement</h2>
+              <div class="blockText">
+                <p>Farmers usually require different machines for different agricultural activities. Purchasing these machines is very expensive, and many farmers cannot afford them. In addition, labour shortages often delay farming operations.</p>
+                <p>Therefore, there is a need for a single machine capable of performing multiple agricultural tasks. Such a machine will reduce expenses, improve efficiency, and make modern farming accessible to more farmers.</p>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec5">
+              <h2 class="blockHeadlight"><span class="blockNumber">5</span> Work Plan</h2>
+              <div class="blockText">
+                <p>The development of our project followed these steps:</p>
+                <ul>
+                  <li>Identified problems faced by farmers.</li>
+                  <li>Discussed possible solutions.</li>
+                  <li>Selected the idea of a multifunctional farming machine.</li>
+                  <li>Prepared the design and working model.</li>
+                  <li>Designed the touchscreen interface.</li>
+                  <li>Integrated multiple farming functions into one concept.</li>
+                  <li>Tested the working concept.</li>
+                  <li>Improved the design based on observations.</li>
+                  <li>Prepared the final project model and report.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec6">
+              <h2 class="blockHeadlight"><span class="blockNumber">6</span> Methodology</h2>
+              <div class="blockText">
+                <p>Our project was developed using the following methodology:</p>
+                <ul>
+                  <li><strong>Step 1:</strong> Surveyed farming problems and collected information from farmers.</li>
+                  <li><strong>Step 2:</strong> Studied different agricultural machines available in the market.</li>
+                  <li><strong>Step 3:</strong> Designed a machine capable of performing multiple agricultural operations.</li>
+                  <li><strong>Step 4:</strong> Created the digital interface and machine concept.</li>
+                  <li><strong>Step 5:</strong> Prepared the project model.</li>
+                  <li><strong>Step 6:</strong> Analyzed the expected benefits and efficiency of the machine.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec7">
+              <h2 class="blockHeadlight"><span class="blockNumber">7</span> Data Analysis</h2>
+              <div class="blockText">
+                <p>During our study, we observed the following problems:</p>
+                
+                <table class="reportTable">
+                  <thead>
+                    <tr>
+                      <th>Problem</th>
+                      <th>Observation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>High labour cost</td><td>Very High</td></tr>
+                    <tr><td>Multiple machines required</td><td>Yes</td></tr>
+                    <tr><td>Farming expenses</td><td>High</td></tr>
+                    <tr><td>Time consumption</td><td>High</td></tr>
+                    <tr><td>Fuel consumption</td><td>High</td></tr>
+                    <tr><td>Maintenance cost</td><td>High</td></tr>
+                  </tbody>
+                </table>
+
+                <p style="margin-top: 24px;"><strong>Expected Improvements:</strong></p>
+                
+                <table class="reportTable">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Existing Method</th>
+                      <th>Proposed Machine</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Number of Machines</td><td>4–5</td><td>1</td></tr>
+                    <tr><td>Labour Requirement</td><td>High</td><td>Low</td></tr>
+                    <tr><td>Time Required</td><td>High</td><td>Low</td></tr>
+                    <tr><td>Cost</td><td>High</td><td>Low</td></tr>
+                    <tr><td>Productivity</td><td>Medium</td><td>High</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec8">
+              <h2 class="blockHeadlight"><span class="blockNumber">8</span> Solution of the Problem</h2>
+              <div class="blockText">
+                <p>Our Multifunctional Smart Farming Machine provides a practical solution by combining several farming operations into one machine.</p>
+                <p>The machine can perform:</p>
+                <ul>
+                  <li>Potato Planting</li>
+                  <li>Rice Planting</li>
+                  <li>Crop Cutting</li>
+                  <li>Crop Bundling</li>
+                  <li>Harvesting</li>
+                </ul>
+                <p>The touchscreen interface allows the farmer to easily select the required operation.</p>
+                <p><strong>Benefits include:</strong></p>
+                <ul>
+                  <li>Lower farming costs</li>
+                  <li>Reduced labour</li>
+                  <li>Faster work</li>
+                  <li>Better crop management</li>
+                  <li>Higher productivity</li>
+                  <li>Easy operation</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec9">
+              <h2 class="blockHeadlight"><span class="blockNumber">9</span> Acknowledgement</h2>
+              <div class="blockText">
+                <p>We sincerely express our gratitude to Kendriya Vidyalaya Muzaffarpur for providing us with the opportunity to participate in the INSPIRE Award – MANAK Project.</p>
+                <p>We are thankful to our Principal, teachers, and school staff for their continuous encouragement and support throughout the development of this project.</p>
+                <p>We also thank our parents and friends for their valuable suggestions and motivation.</p>
+                <p>Finally, we thank the Department of Science & Technology (DST), Government of India, for encouraging young students to develop innovative ideas through the INSPIRE Award – MANAK programme.</p>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec10">
+              <h2 class="blockHeadlight"><span class="blockNumber">10</span> Result</h2>
+              <div class="blockText">
+                <p>The project successfully demonstrates that one smart farming machine can perform multiple agricultural operations efficiently.</p>
+                <p>The proposed machine is expected to:</p>
+                <ul>
+                  <li>Reduce farming costs.</li>
+                  <li>Save farmers' valuable time.</li>
+                  <li>Reduce labour dependency.</li>
+                  <li>Increase productivity.</li>
+                  <li>Improve the overall efficiency of agricultural operations.</li>
+                  <li>Promote smart and modern farming practices.</li>
+                </ul>
+                <p>Our project has shown that a multifunctional farming machine can become an affordable and practical solution for Indian farmers in the future.</p>
+              </div>
+            </div>
+
+            <div class="contentBlock reveal" id="sec11">
+              <h2 class="blockHeadlight"><span class="blockNumber" style="font-size:20px;">★</span> Project Details</h2>
+              <div class="blockText">
+                <div class="memberList">
+                  <div class="memberGroup">
+                    <div class="memberGroupTitle">PROJECT MEMBERS</div>
+                    <ul>
+                      <li>Himanshu Kumar Choudhary</li>
+                      <li>Ragib</li>
+                    </ul>
+                  </div>
+                  <div class="memberGroup">
+                    <div class="memberGroupTitle">School</div>
+                    <ul>
+                      <li>Kendriya Vidyalaya Muzaffarpur</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer class="siteFooter" aria-label="Site footer">
+      <div class="footerInner">
+        <div class="footerLeft">
+          <span class="navLogo footerLogo">KV <em>Project</em></span>
+          <p class="footerTagline">Neural intelligence meets precision agriculture.</p>
+        </div>
+        <nav class="footerNav" aria-label="Footer navigation">
+          <a href="./home.html">Overview</a>
+          <a href="./showcase.html">AI Showcase</a>
+          <a href="./report.html" class="footerLink">Report</a>
+        </nav>
+        <div class="footerRight">
+          <span class="footerDivider"></span>
+          <p class="footerCopy">© 2026 KV Project · HIMANSHU & RAGIB</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ── Back to Top Button ── -->
+    <button class="backToTop" id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
+
+    <script src="./app.js" defer></script>
+    <script>
+      // Scroll reveal
+      const reveals = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.10 });
+      reveals.forEach(el => io.observe(el));
+
+      // Navbar solid background on scroll
+      const nav = document.getElementById('topNav');
+      window.addEventListener('scroll', () => {
+        if (nav) nav.classList.toggle('scrolled', window.scrollY > 60);
+      }, { passive: true });
+
+      // Back-to-top visibility
+      const btt = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        if (btt) btt.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      btt?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      
+      // Active state for sidebar links based on scroll
+      const blocks = document.querySelectorAll('.contentBlock');
+      const sideLinks = document.querySelectorAll('.sidebarLink');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting) {
+            sideLinks.forEach(link => {
+              if (link.getAttribute('href') === '#' + entry.target.id) {
+                link.style.color = 'var(--gold-light)';
+                link.querySelector('span').style.background = 'linear-gradient(135deg, var(--gold-base), var(--gold-hover))';
+                link.querySelector('span').style.color = '#000';
+              } else {
+                link.style.color = '';
+                link.querySelector('span').style.background = '';
+                link.querySelector('span').style.color = '';
+              }
+            });
+          }
+        });
+      }, { rootMargin: '-20% 0px -70% 0px' });
+      blocks.forEach(block => observer.observe(block));
+    </script>
+  </body>
+</html>
